@@ -27,7 +27,7 @@ test('write a private message & check it\'s not plaintext', function (t) {
 })
 
 test('write a private message & manually decrypt', function (t) {
-  t.plan(9)
+  t.plan(11)
 
   const keypair = crypto.keyPair()
 
@@ -44,6 +44,7 @@ test('write a private message & manually decrypt', function (t) {
         t.same(message.type, 'private/text', 'type is ok')
         t.same(typeof message.content, 'object', 'content is set')
         t.same(message.content.text, 'hello', 'text is ok')
+        t.same(message.content.recipients, [keypair.publicKey.toString('hex')], 'recipients field ok')
       } catch (err) {
         t.error(err)
       }
@@ -58,6 +59,7 @@ test('write a private message & manually decrypt', function (t) {
           t.same(message.type, 'private/text', 'type is ok')
           t.same(typeof message.content, 'object', 'content is set')
           t.same(message.content.text, 'hello', 'text is ok')
+          t.same(message.content.recipients, [keypair.publicKey.toString('hex')], 'recipients field ok')
         } catch (err) {
           t.error(err)
         }

@@ -163,6 +163,7 @@ Cabal.prototype.publishPrivateMessage = function (text, recipientKey, cb) {
     const message = {
       type: 'private/text',
       content: {
+        recipients: [recipientKey.toString('hex')],
         text
       },
       timestamp: timestamp()
