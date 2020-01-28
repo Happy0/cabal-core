@@ -16,7 +16,7 @@ test('write a private message & check it\'s not plaintext', function (t) {
     cabal.publishPrivateMessage('greetings', keypair.publicKey, function (err, cipherMsg) {
       t.error(err)
       t.same(cipherMsg.type, 'encrypted', 'type is "encrypted"')
-      t.ok(Buffer.isBuffer(cipherMsg.content), 'content is a buffer')
+      t.ok(typeof cipherMsg.content, 'content is a string')
       t.notSame(cipherMsg.content.toString(), 'greetings')
     })
   })
@@ -33,7 +33,7 @@ test('write a private message & manually decrypt', function (t) {
       t.error(err)
       t.same(cipherMsg.type, 'encrypted', 'type is "encrypted"')
 
-      const plaintext = unbox(cipherMsg.content, keypair.secretKey).toString()
+      const plaintext = unbox(Buffer.from(cipherMsg.content, 'base64'), keypair.secretKey).toString()
       try {
         const message = JSON.parse(plaintext)
         t.same(message.type, 'private/text', 'type is ok')
