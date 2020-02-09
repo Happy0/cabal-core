@@ -154,8 +154,8 @@ Cabal.prototype.publish = function (message, opts, cb) {
  */
 Cabal.prototype.publishPrivateMessage = function (text, recipientKey, cb) {
   if (!cb) cb = noop
-  if (typeof text !== 'string') return cb(new Error('text must be a string'))
-  if (!isHypercoreKey(recipientKey)) return cb(new Error('recipientKey must be a 32-byte hypercore key'))
+  if (typeof text !== 'string') return process.nextTick(cb, new Error('text must be a string'))
+  if (!isHypercoreKey(recipientKey)) return process.nextTick(cb, new Error('recipientKey must be a 32-byte hypercore key'))
 
   if (typeof recipientKey === 'string') recipientKey = Buffer.from(recipientKey, 'hex')
 
