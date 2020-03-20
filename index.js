@@ -15,6 +15,7 @@ var createMessagesView = require('./views/messages')
 var createTopicsView = require('./views/topics')
 var createUsersView = require('./views/users')
 var createModerationView = require('./views/moderation')
+var createPrivateMessagesView = require('./views/private-messages')
 var swarm = require('./swarm')
 
 var DATABASE_VERSION = 1
@@ -24,6 +25,7 @@ var MESSAGES = 'm'
 var TOPICS = 't'
 var USERS = 'u'
 var MODERATION = 'x'
+var PRIVATE_MESSAGES = 'p'
 
 module.exports = Cabal
 module.exports.databaseVersion = DATABASE_VERSION
@@ -93,6 +95,11 @@ function Cabal (storage, key, opts) {
     this, this.modKey,
     sublevel(this.db, MODERATION, { valueEncoding: json }))
   )
+  this.feed(function (feed) {
+    self.kcore.use('privateMessages', createPrivateMessagesView(
+      feed.secretKey,
+      sublevel(self.db, PRIVATE_MESSAGES, { valueEncoding: json })))
+  })
 
   this.messages = this.kcore.api.messages
   this.channels = this.kcore.api.channels
